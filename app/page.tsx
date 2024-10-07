@@ -1,4 +1,3 @@
-
 'use client'
 
 import React from 'react'
@@ -6,30 +5,67 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Check, Flame, Zap, Bomb } from "lucide-react"
+import { Check } from "lucide-react"
 import Link from "next/link"
+import Script from 'next/script'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
-export default function Home() {
-
-  const [keyword, setKeyword] = React.useState("")
+export default function LandingPage() {
+  const [nicheKeywords, setNicheKeywords] = React.useState("")
+  const [fullName, setFullName] = React.useState("")
   const [email, setEmail] = React.useState("")
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
   const pricingRef = React.useRef<HTMLDivElement>(null)
   const sampleRef = React.useRef<HTMLDivElement>(null)
-  const comingSoonRef = React.useRef<HTMLDivElement>(null)
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Submitted:", { keyword, email })
-    setKeyword("")
-    setEmail("")
+    setIsLoading(true)
+
+    const payload = {
+      search: nicheKeywords,
+      full_name: fullName,
+      email: email
+    }
+
+    try {
+      const response = await fetch('https://app.prospectingbandit.com/phoneagent_api/db_create_scrape_sample?api_password=KrevSolutionsisCool9939', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      setNicheKeywords("")
+      setFullName("")
+      setEmail("")
+      setIsModalOpen(true)
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
-  
+
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
+      <Script src="//tinder.thrivecart.com/embed/v1/thrivecart.js" strategy="lazyOnload" />
       <div className="absolute inset-0 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
       <header className="px-4 lg:px-6 h-14 flex items-center sticky top-0 bg-black bg-opacity-80 backdrop-blur-sm z-10">
         <Link className="flex items-center justify-center" href="#">
@@ -55,9 +91,6 @@ export default function Home() {
           </Button>
           <Button variant="link" className="text-sm font-medium text-white hover:text-blue-400" onClick={() => scrollToSection(sampleRef)}>
             Try Sample
-          </Button>
-          <Button variant="link" className="text-sm font-medium text-white hover:text-blue-400" onClick={() => scrollToSection(comingSoonRef)}>
-            Coming Soon
           </Button>
         </nav>
       </header>
@@ -94,7 +127,7 @@ export default function Home() {
                   <ul className="mt-4 space-y-2">
                     <li className="flex items-center text-gray-300">
                       <Check className="mr-2 h-4 w-4 text-blue-400" />
-                      250 credits (equal to 10,000 contacts)
+                      500 credits (equal to 10,000 contacts)
                     </li>
                     <li className="flex items-center text-gray-300">
                       <Check className="mr-2 h-4 w-4 text-blue-400" />
@@ -106,7 +139,17 @@ export default function Home() {
                       For those who want fast, high-powered data extraction, this plan taps into speed and precision, giving you just enough for a quick rush of information without overdoing it.
                     </p>
                   </div>
-                  <Button className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white">Choose Plan</Button>
+                  <div className="mt-6 w-full">
+                    <a
+                      data-thrivecart-account="prospectingbandit"
+                      data-thrivecart-tpl="v2"
+                      data-thrivecart-product="52"
+                      className="thrivecart-button thrivecart-button-styled thrivecart-button_style-rounded thrivecart-button-custom w-full text-center py-2 px-4 rounded"
+                      style={{ backgroundColor: '#E7865F', color: 'white', display: 'inline-block', textDecoration: 'none' }}
+                    >
+                      Choose Plan
+                    </a>
+                  </div>
                 </CardContent>
               </Card>
               <Card className="bg-gray-800 border-blue-400">
@@ -118,7 +161,7 @@ export default function Home() {
                   <ul className="mt-4 space-y-2">
                     <li className="flex items-center text-gray-300">
                       <Check className="mr-2 h-4 w-4 text-blue-400" />
-                      1,000 credits (equal to 50,000 contacts)
+                      2,500 credits (equal to 50,000 contacts)
                     </li>
                     <li className="flex items-center text-gray-300">
                       <Check className="mr-2 h-4 w-4 text-blue-400" />
@@ -130,7 +173,17 @@ export default function Home() {
                       Unleash controlled chaos with a plan that's built for those who want to dive deeper into data, scraping layers that others might fear to touch. You're not here to play by the rules—you're here to disrupt.
                     </p>
                   </div>
-                  <Button className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white">Choose Plan</Button>
+                  <div className="mt-6 w-full">
+                    <a
+                      data-thrivecart-account="prospectingbandit"
+                      data-thrivecart-tpl="v2"
+                      data-thrivecart-product="53"
+                      className="thrivecart-button thrivecart-button-styled thrivecart-button_style-rounded thrivecart-button-custom w-full text-center py-2 px-4 rounded"
+                      style={{ backgroundColor: '#E7865F', color: 'white', display: 'inline-block', textDecoration: 'none' }}
+                    >
+                      Choose Plan
+                    </a>
+                  </div>
                 </CardContent>
               </Card>
               <Card className="bg-gray-800 border-blue-400">
@@ -142,7 +195,7 @@ export default function Home() {
                   <ul className="mt-4 space-y-2">
                     <li className="flex items-center text-gray-300">
                       <Check className="mr-2 h-4 w-4 text-blue-400" />
-                      2,500 credits (equal to 100,000+ contacts)
+                      5,000 credits (equal to 100,000 contacts)
                     </li>
                     <li className="flex items-center text-gray-300">
                       <Check className="mr-2 h-4 w-4 text-blue-400" />
@@ -154,7 +207,17 @@ export default function Home() {
                       For the elite few who push boundaries and demand total freedom in their scraping endeavors. This plan offers unrestricted access, giving you the power to break through any data limit and surf the biggest waves of information.
                     </p>
                   </div>
-                  <Button className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white">Choose Plan</Button>
+                  <div className="mt-6 w-full">
+                    <a
+                      data-thrivecart-account="prospectingbandit"
+                      data-thrivecart-tpl="v2"
+                      data-thrivecart-product="54"
+                      className="thrivecart-button thrivecart-button-styled thrivecart-button_style-rounded thrivecart-button-custom w-full text-center py-2 px-4 rounded"
+                      style={{ backgroundColor: '#E7865F', color: 'white', display: 'inline-block', textDecoration: 'none' }}
+                    >
+                      Choose Plan
+                    </a>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -171,18 +234,29 @@ export default function Home() {
               </div>
               <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="keyword" className="text-left block text-gray-300">Keyword</Label>
+                  <Label htmlFor="nicheKeywords" className="text-left block text-gray-300">Niche Keywords</Label>
                   <Input
-                    id="keyword"
-                    placeholder="e.g., Solar installer in Las Vegas"
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
+                    id="nicheKeywords"
+                    placeholder="e.g., Solar Installer, Dentist, Personal Trainer"
+                    value={nicheKeywords}
+                    onChange={(e) => setNicheKeywords(e.target.value)}
                     required
                     className="bg-gray-600 text-white border-gray-500 focus:border-blue-400 placeholder-gray-400"
                   />
                   <p className="text-sm text-gray-400 text-left">
-                    More examples: "Dentist in New York", "Plumber in Chicago"
+                    Enter your niche keywords separated by a comma, do not include city we will search top 500 USA cities for you automatically.
                   </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="fullName" className="text-left block text-gray-300">Full Name</Label>
+                  <Input
+                    id="fullName"
+                    placeholder="John Doe"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                    className="bg-gray-600 text-white border-gray-500 focus:border-blue-400 placeholder-gray-400"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-left block text-gray-300">Email</Label>
@@ -196,73 +270,10 @@ export default function Home() {
                     className="bg-gray-600 text-white border-gray-500 focus:border-blue-400 placeholder-gray-400"
                   />
                 </div>
-                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  Get Your Free Sample
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
+                  {isLoading ? 'Submitting...' : 'Get Your Free Sample'}
                 </Button>
               </form>
-            </div>
-          </div>
-        </section>
-        <section id="coming-soon" className="w-full py-12 md:py-24 lg:py-32 bg-gray-900" ref={comingSoonRef}>
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-8 text-center">
-              <div className="relative">
-                <div className="absolute inset-0 bg-red-500 blur-3xl opacity-50 animate-pulse"></div>
-                <div className="relative bg-gray-900 border-4 border-red-500 rounded-full p-8">
-                  <Bomb className="h-32 w-32 text-red-500 animate-bounce" />
-                </div>
-              </div>
-              <div className="bg-red-500 text-white px-6 py-3 rounded-full text-xl font-bold mb-4 animate-pulse">Coming Soon</div>
-              <h2 className="text-4xl font-extrabold tracking-tighter sm:text-5xl text-red-500">
-                The "Too Personalized Bro" Feature
-              </h2>
-              <p className="text-3xl font-bold text-white">Marketing on Steroids</p>
-              <p className="mx-auto max-w-[800px] text-gray-300 text-xl md:text-2xl font-semibold">
-                Yo, listen up! We're about to drop a truth bomb that'll make your competition wet their pants. This ain't your grandma's marketing tool – it's the fight club of personalization.
-              </p>
-              <div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
-                <Card className="bg-gray-800 border-red-500 transform hover:scale-105 transition-transform duration-200">
-                  <CardHeader>
-                    <CardTitle className="text-red-500 flex items-center">
-                      <Flame className="mr-2" />
-                      The Big Kahuna Offer
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300">We're talking offers so tailored, they'll make your prospects think you're a freakin' mind reader. It's like we injected your pitch with a cocktail of adrenaline and marketing crack.</p>
-                  </CardContent>
-                </Card>
-                <Card className="bg-gray-800 border-red-500 transform hover:scale-105 transition-transform duration-200">
-                  <CardHeader>
-                    <CardTitle className="text-red-500 flex items-center">
-                      <Zap className="mr-2" />
-                      Facebook Ads on 'Roids
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300">Imagine Facebook ads so targeted, Zuckerberg himself would blush. We're not just thinking outside the box – we're nuking the damn box from orbit.</p>
-                  </CardContent>
-                </Card>
-                <Card className="bg-gray-800 border-red-500 transform hover:scale-105 transition-transform duration-200">
-                  <CardHeader>
-                    <CardTitle className="text-red-500 flex items-center">
-                      <Bomb className="mr-2" />
-                      Email Copy That Slaps
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-300">Our email templates are like Tyler Durden for your inbox – they'll punch your prospects right in the feels and leave 'em begging for more.</p>
-                  </CardContent>
-                </Card>
-              </div>
-              <div className="mt-8 space-y-4">
-                <p className="text-2xl font-bold text-red-500">The First Rule of "Too Personalized Bro" Feature:</p>
-                <p className="text-xl text-gray-300">You do talk about it. You talk about it A LOT.</p>
-                <p className="text-lg text-gray-400">Because when you're crushing it this hard, keeping quiet is for suckers.</p>
-              </div>
-              <Button className="mt-8 bg-red-600 hover:bg-red-700 text-white text-lg px-8 py-3 animate-bounce">
-                Ride the Wave, Bro!
-              </Button>
             </div>
           </div>
         </section>
@@ -278,6 +289,31 @@ export default function Home() {
           </Link>
         </nav>
       </footer>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="bg-gray-900 text-white border-red-600 border-2">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-red-500">The First Rule of BizScraper</DialogTitle>
+            <DialogDescription className="text-lg text-gray-300">
+              You do talk about it. You talk about it A LOT.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-lg">
+              With BizScraper, you're about to become the Tyler Durden of your industry. We've received your submission, and your sample report will hit your inbox within the hour. Get ready to disrupt the system.
+            </p>
+            <p className="text-lg text-yellow-400">
+              Don't forget to check your spam folder if you don't see the report in your inbox!
+            </p>
+            <Button 
+              onClick={() => setIsModalOpen(false)}
+              className="w-full bg-red-600 hover:bg-red-700 text-white text-lg"
+            >
+              I Understand
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
